@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:aop="http://www.springframework.org/schema/aop" 
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		                    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+							http://www.springframework.org/schema/context 
+							http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+							http://www.springframework.org/schema/aop 
+							http://www.springframework.org/schema/aop/spring-aop-4.2.xsd 
+							http://www.springframework.org/schema/tx 
+							http://www.springframework.org/schema/tx/spring-tx-4.2.xsd ">
+	
+	
+	<context:annotation-config />
+	
+	<context:component-scan base-package="com.ujiuye"></context:component-scan>
+	<!-- 
+	   @Compoent
+	   @Repository
+	   @Service
+	   @Controller
+	 -->
+	<!--  提供了一个数据源 -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	<bean name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+	</bean>
+	<!-- 
+	     方言  属性(展示sql语句  格式化sql 自动建表)
+	    加载配置文件***_hbm.xml(类和表的对应关系)    	
+	 -->
+    <!--  整合hibernate -->
+    <bean name="sessionFactory" 
+     class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+         <!-- 数据库连接 -->
+         <property name="dataSource" ref="dataSource"></property>
+	     <!--  基本属性 -->      
+         <property name="hibernateProperties">
+              <props>
+                  <!-- 方言 -->
+                  <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                  <!-- 显示sql -->
+                  <prop key="hibernate.show_sql">true</prop>
+                  <!-- 格式化sql -->
+                  <prop key="hibernate.format_sql">true</prop>
+                  <!-- 自动建表 -->
+                  <prop key="hibernate.hbm2ddl.auto">update</prop>
+              </props>
+         </property>
+           <!--  加载映射文件  -->
+         
+         <property name="mappingResources">
+             <list>
+                 <value>com/ujiuye/bean/Computer_hbm.xml</value>
+             </list>
+         </property> 
+         
+          <!-- 扫描添加了hibernate注解的bean类 -->
+        <!--  <property name="packagesToScan" value="com.ujiuye.bean"/> -->
+    </bean> 
+
+    <!--  自己创建hibernateTemplate  -->
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+</beans>
