@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ujiuye.mapper.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.ujiuye.bean.Product" >
+    <id column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="pname" property="pname" jdbcType="VARCHAR" />
+    <result column="marketprice" property="marketprice" jdbcType="DOUBLE" />
+    <result column="shopprice" property="shopprice" jdbcType="DOUBLE" />
+    <result column="pimage" property="pimage" jdbcType="VARCHAR" />
+    <result column="pdate" property="pdate" jdbcType="DATE" />
+    <result column="ishot" property="ishot" jdbcType="INTEGER" />
+    <result column="pdesc" property="pdesc" jdbcType="VARCHAR" />
+    <result column="pflag" property="pflag" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="DOUBLE" />
+    <result column="floated" property="floated" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    pid, pname, marketprice, shopprice, pimage, pdate, ishot, pdesc, pflag, weight, floated
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ujiuye.bean.ProductExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select> 
+  
+  <resultMap type="com.ujiuye.bean.Product" id="newResult" extends="BaseResultMap">
+  		<collection property="prodetails" column="pid" ofType="com.ujiuye.bean.Productdetail" select="com.ujiuye.mapper.ProductdetailMapper.getProByPid"> 
+  			
+  		</collection>
+  		<collection property="evaluates" column="pid"  ofType="com.ujiuye.bean.Evaluate" select="com.ujiuye.mapper.EvaluateMapper.getProByPid">
+  			
+  		</collection>
+  </resultMap>
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="newResult" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from product
+    where pid = #{pid,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product
+    where pid = #{pid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ujiuye.bean.ProductExample" >
+    delete from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ujiuye.bean.Product" >
+    <selectKey keyColumn="pid" keyProperty="pid" order="AFTER" resultType="int">
+    	select last_insert_id();
+    </selectKey>
+    insert into product (pid, pname, marketprice, 
+      shopprice, pimage, pdate, 
+      ishot, pdesc, pflag, 
+      weight, floated)
+    values (#{pid,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{marketprice,jdbcType=DOUBLE}, 
+      #{shopprice,jdbcType=DOUBLE}, #{pimage,jdbcType=VARCHAR}, #{pdate,jdbcType=DATE}, 
+      #{ishot,jdbcType=INTEGER}, #{pdesc,jdbcType=VARCHAR}, #{pflag,jdbcType=INTEGER}, 
+      #{weight,jdbcType=DOUBLE}, #{floated,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ujiuye.bean.Product" >
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="pname != null" >
+        pname,
+      </if>
+      <if test="marketprice != null" >
+        marketprice,
+      </if>
+      <if test="shopprice != null" >
+        shopprice,
+      </if>
+      <if test="pimage != null" >
+        pimage,
+      </if>
+      <if test="pdate != null" >
+        pdate,
+      </if>
+      <if test="ishot != null" >
+        ishot,
+      </if>
+      <if test="pdesc != null" >
+        pdesc,
+      </if>
+      <if test="pflag != null" >
+        pflag,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="floated != null" >
+        floated,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="pname != null" >
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="marketprice != null" >
+        #{marketprice,jdbcType=DOUBLE},
+      </if>
+      <if test="shopprice != null" >
+        #{shopprice,jdbcType=DOUBLE},
+      </if>
+      <if test="pimage != null" >
+        #{pimage,jdbcType=VARCHAR},
+      </if>
+      <if test="pdate != null" >
+        #{pdate,jdbcType=DATE},
+      </if>
+      <if test="ishot != null" >
+        #{ishot,jdbcType=INTEGER},
+      </if>
+      <if test="pdesc != null" >
+        #{pdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="pflag != null" >
+        #{pflag,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="floated != null" >
+        #{floated,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ujiuye.bean.ProductExample" resultType="java.lang.Integer" >
+    select count(*) from product
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update product
+    <set >
+      <if test="record.pid != null" >
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.pname != null" >
+        pname = #{record.pname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.marketprice != null" >
+        marketprice = #{record.marketprice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.shopprice != null" >
+        shopprice = #{record.shopprice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.pimage != null" >
+        pimage = #{record.pimage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pdate != null" >
+        pdate = #{record.pdate,jdbcType=DATE},
+      </if>
+      <if test="record.ishot != null" >
+        ishot = #{record.ishot,jdbcType=INTEGER},
+      </if>
+      <if test="record.pdesc != null" >
+        pdesc = #{record.pdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pflag != null" >
+        pflag = #{record.pflag,jdbcType=INTEGER},
+      </if>
+      <if test="record.weight != null" >
+        weight = #{record.weight,jdbcType=DOUBLE},
+      </if>
+      <if test="record.floated != null" >
+        floated = #{record.floated,jdbcType=DOUBLE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update product
+    set pid = #{record.pid,jdbcType=INTEGER},
+      pname = #{record.pname,jdbcType=VARCHAR},
+      marketprice = #{record.marketprice,jdbcType=DOUBLE},
+      shopprice = #{record.shopprice,jdbcType=DOUBLE},
+      pimage = #{record.pimage,jdbcType=VARCHAR},
+      pdate = #{record.pdate,jdbcType=DATE},
+      ishot = #{record.ishot,jdbcType=INTEGER},
+      pdesc = #{record.pdesc,jdbcType=VARCHAR},
+      pflag = #{record.pflag,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=DOUBLE},
+      floated = #{record.floated,jdbcType=DOUBLE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ujiuye.bean.Product" >
+    update product
+    <set >
+      <if test="pname != null" >
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="marketprice != null" >
+        marketprice = #{marketprice,jdbcType=DOUBLE},
+      </if>
+      <if test="shopprice != null" >
+        shopprice = #{shopprice,jdbcType=DOUBLE},
+      </if>
+      <if test="pimage != null" >
+        pimage = #{pimage,jdbcType=VARCHAR},
+      </if>
+      <if test="pdate != null" >
+        pdate = #{pdate,jdbcType=DATE},
+      </if>
+      <if test="ishot != null" >
+        ishot = #{ishot,jdbcType=INTEGER},
+      </if>
+      <if test="pdesc != null" >
+        pdesc = #{pdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="pflag != null" >
+        pflag = #{pflag,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="floated != null" >
+        floated = #{floated,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ujiuye.bean.Product" >
+    update product
+    set pname = #{pname,jdbcType=VARCHAR},
+      marketprice = #{marketprice,jdbcType=DOUBLE},
+      shopprice = #{shopprice,jdbcType=DOUBLE},
+      pimage = #{pimage,jdbcType=VARCHAR},
+      pdate = #{pdate,jdbcType=DATE},
+      ishot = #{ishot,jdbcType=INTEGER},
+      pdesc = #{pdesc,jdbcType=VARCHAR},
+      pflag = #{pflag,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=DOUBLE},
+      floated = #{floated,jdbcType=DOUBLE}
+    where pid = #{pid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getHot" resultMap="BaseResultMap"> 
+  		select <include refid="Base_Column_List"></include> from product where  ishot=1 limit 0,9
+  </select>
+  
+   <select id="getNew" resultMap="BaseResultMap"> 
+  		select <include refid="Base_Column_List"></include> from product order by pdate desc limit 0,9
+  </select>
+  
+  <select id="getProByCid" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List"></include>  from product where pid in (select pid from pro_cat where cid=#{cid})  		
+  </select>
+  
+  <select id="getAllPro" resultMap="BaseResultMap">
+  		select <include refid="Base_Column_List"></include>  from product limit #{start},#{pagesize}
+  </select>
+  
+</mapper>
