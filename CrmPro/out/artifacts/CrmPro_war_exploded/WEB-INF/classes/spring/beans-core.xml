@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	                   http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+                       http://www.springframework.org/schema/context 
+                       http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <!--  开启注解模式 -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.ujiuye"></context:component-scan>
+
+
+    <!-- 引入需要的常量值所在的文件 -->
+    <context:property-placeholder
+            location="classpath:jdbc.properties"></context:property-placeholder>
+    <!-- 数据源 -->
+    <bean id="dataSource"
+          class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driverClass}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+
+    <!-- 读取mybatis配置文件 -->
+    <bean id="sqlSessionFactoryBean"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation"
+                  value="classpath:mybatis/sqlMapConfig.xml"></property>
+
+        <!-- 扫描我们自定义目录下的mapper.xml文件  -->
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
+
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            supportMethodsArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!-- 加载mapper.xml 和 mapper接口 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ujiuye.mapper"></property>
+    </bean>
+
+</beans>
+
+
+
+
+
+
+

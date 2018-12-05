@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		                    http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+							http://www.springframework.org/schema/tx 
+							http://www.springframework.org/schema/tx/spring-tx-4.3.xsd ">
+
+
+    <!-- 引入spring提供的事务管理 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+
+    <!--  开启事务注解模式 -->
+    <tx:annotation-driven/>
+
+
+    <!-- 设置事务的通知 -->
+    <!-- <tx:advice id="myAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" isolation="READ_COMMITTED" propagation="REQUIRED"/>
+            <tx:method name="get*" isolation="READ_COMMITTED" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    配置aop
+    <aop:config>
+        <aop:pointcut expression="execution(* com.ujiuye.service.*.*(..))" id="pt"/>
+        <aop:advisor advice-ref="myAdvice" pointcut-ref="pt"/>
+    </aop:config> -->
+</beans>
+
+
+
+
+
+
+

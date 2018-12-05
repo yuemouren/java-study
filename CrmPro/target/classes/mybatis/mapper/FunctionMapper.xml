@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ujiuye.mapper.FunctionMapper">
+    <resultMap id="BaseResultMap" type="com.ujiuye.bean.Function">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="proname" property="proname" jdbcType="VARCHAR"/>
+        <result column="analysisname" property="analysisname" jdbcType="VARCHAR"/>
+        <result column="modele_fk" property="modeleFk" jdbcType="INTEGER"/>
+        <result column="functionname" property="functionname" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="VARCHAR"/>
+        <result column="simpledis" property="simpledis" jdbcType="VARCHAR"/>
+        <result column="detaileddis" property="detaileddis" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, proname, analysisname, modele_fk, functionname, level, simpledis, detaileddis,
+        remark
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ujiuye.bean.FunctionExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from function
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from function
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from function
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.ujiuye.bean.FunctionExample">
+        delete from function
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.ujiuye.bean.Function">
+        insert into function (id, proname, analysisname,
+        modele_fk, functionname, level,
+        simpledis, detaileddis, remark
+        )
+        values (#{id,jdbcType=INTEGER}, #{proname,jdbcType=VARCHAR}, #{analysisname,jdbcType=VARCHAR},
+        #{modeleFk,jdbcType=INTEGER}, #{functionname,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR},
+        #{simpledis,jdbcType=VARCHAR}, #{detaileddis,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.ujiuye.bean.Function">
+        insert into function
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="proname != null">
+                proname,
+            </if>
+            <if test="analysisname != null">
+                analysisname,
+            </if>
+            <if test="modeleFk != null">
+                modele_fk,
+            </if>
+            <if test="functionname != null">
+                functionname,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="simpledis != null">
+                simpledis,
+            </if>
+            <if test="detaileddis != null">
+                detaileddis,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="proname != null">
+                #{proname,jdbcType=VARCHAR},
+            </if>
+            <if test="analysisname != null">
+                #{analysisname,jdbcType=VARCHAR},
+            </if>
+            <if test="modeleFk != null">
+                #{modeleFk,jdbcType=INTEGER},
+            </if>
+            <if test="functionname != null">
+                #{functionname,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="simpledis != null">
+                #{simpledis,jdbcType=VARCHAR},
+            </if>
+            <if test="detaileddis != null">
+                #{detaileddis,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.ujiuye.bean.FunctionExample" resultType="java.lang.Integer">
+        select count(*) from function
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update function
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.proname != null">
+                proname = #{record.proname,jdbcType=VARCHAR},
+            </if>
+            <if test="record.analysisname != null">
+                analysisname = #{record.analysisname,jdbcType=VARCHAR},
+            </if>
+            <if test="record.modeleFk != null">
+                modele_fk = #{record.modeleFk,jdbcType=INTEGER},
+            </if>
+            <if test="record.functionname != null">
+                functionname = #{record.functionname,jdbcType=VARCHAR},
+            </if>
+            <if test="record.level != null">
+                level = #{record.level,jdbcType=VARCHAR},
+            </if>
+            <if test="record.simpledis != null">
+                simpledis = #{record.simpledis,jdbcType=VARCHAR},
+            </if>
+            <if test="record.detaileddis != null">
+                detaileddis = #{record.detaileddis,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update function
+        set id = #{record.id,jdbcType=INTEGER},
+        proname = #{record.proname,jdbcType=VARCHAR},
+        analysisname = #{record.analysisname,jdbcType=VARCHAR},
+        modele_fk = #{record.modeleFk,jdbcType=INTEGER},
+        functionname = #{record.functionname,jdbcType=VARCHAR},
+        level = #{record.level,jdbcType=VARCHAR},
+        simpledis = #{record.simpledis,jdbcType=VARCHAR},
+        detaileddis = #{record.detaileddis,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ujiuye.bean.Function">
+        update function
+        <set>
+            <if test="proname != null">
+                proname = #{proname,jdbcType=VARCHAR},
+            </if>
+            <if test="analysisname != null">
+                analysisname = #{analysisname,jdbcType=VARCHAR},
+            </if>
+            <if test="modeleFk != null">
+                modele_fk = #{modeleFk,jdbcType=INTEGER},
+            </if>
+            <if test="functionname != null">
+                functionname = #{functionname,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="simpledis != null">
+                simpledis = #{simpledis,jdbcType=VARCHAR},
+            </if>
+            <if test="detaileddis != null">
+                detaileddis = #{detaileddis,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ujiuye.bean.Function">
+        update function
+        set proname = #{proname,jdbcType=VARCHAR},
+        analysisname = #{analysisname,jdbcType=VARCHAR},
+        modele_fk = #{modeleFk,jdbcType=INTEGER},
+        functionname = #{functionname,jdbcType=VARCHAR},
+        level = #{level,jdbcType=VARCHAR},
+        simpledis = #{simpledis,jdbcType=VARCHAR},
+        detaileddis = #{detaileddis,jdbcType=VARCHAR},
+        remark = #{remark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
